@@ -1,7 +1,7 @@
 ﻿window.onload = function () {
 	
 	var messages = [];
-	var socket = io.connect('http://localhost:5000');
+	var socket = io.connect('https://ancient-coast-2668.herokuapp.com/');
 	var field = document.getElementById("field");
 	var sendButton = document.getElementById("send");
 	var content = document.getElementById("content");
