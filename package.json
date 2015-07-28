@@ -10,14 +10,14 @@
   },
   "devDependencies": {},
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "echo \"Warning: no test specified\" && exit 0",
     "start": "node server.js"
   },
   "repository": {
     "type": "git",
     "url": "git+https://elias551@github.com/elias551/tacstream.git"
   },
-  "author": "",
+  "author": "Elias Platek",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/elias551/tacstream/issues"
