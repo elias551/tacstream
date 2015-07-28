@@ -20,7 +20,10 @@ app.get('/', function (req, res) {
 // public folder
 app.use(express.static(__dirname + '/public'));
 
-var io = require('socket.io').listen(app.listen(5000));
+var port = process.env.PORT || 5000;
+
+var io = require('socket.io').listen(app.listen(port));
+console.log("Listening on port " + port);
 
 io.sockets.on('connection', function (socket) {
 	socket.emit('message', {
