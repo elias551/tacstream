@@ -1,0 +1,26 @@
+﻿doctype html
+html
+    head
+        title= "TACstream"    
+        script(src='/chat.js')
+        script(src='/socket.io/socket.io.js')
+        link(rel='stylesheet',href='//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css')
+        link(rel='stylesheet',href='//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css')
+    body
+        .container
+            .jumbotron.text-center
+                h1
+                    span.fa.fa-lock
+                    span Node authentication
+                p Login or register with:
+                a.btn.btn-default(href='/login')
+                    span.fa.fa-user
+                    .span Local login
+                a.btn.btn-default(href='/signup')
+                    span.fa.fa-user
+                    .span Local signup
+                #content(style='height: 300px; text-align: left; border: solid 1px #999; overflow-y: scroll;')
+                .controls
+                    input#name(style='width:350px;', placeholder='name')
+                    input#field(style='width:350px;', placeholder='message')
+                    input#send(type='button', value='send')

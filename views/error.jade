@@ -1,7 +1,12 @@
 ﻿doctype html
 html
     head
-        title= "Error page"    
+        title= "Error page"
+        link(rel='stylesheet',href='//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css')
+        link(rel='stylesheet',href='//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css')
     body
-        .title error code #{statusCode}
-        #content(style='margin: 0 0 20px 0; border: solid 1px #999;')= error
+        .container
+            h1
+                span.fa.fa-exclamation-triangle
+                span &nbsp;Error code #{statusCode}
+            pre#content= error
