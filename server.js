@@ -10,9 +10,10 @@ var express                 = require('express'),
     passport                = require('passport'),
     flash                   = require('connect-flash'),
     
-    port                    = process.env.PORT || 5000,
-    sessionSecret           = process.env.TACSTREAM_SESSION_SECRET || 'coucou',
-
+    port                    = process.env.PORT,
+    sessionSecret           = process.env.TACSTREAM_SESSION_SECRET,
+    
+    authConfig              = require('./config/auth'),
     passportConfig          = require('./config/passport'),
     dbProvider              = require('./app/dbProvider'),
     errorHandler            = require('./app/errorHandler'),
@@ -23,10 +24,17 @@ function createApp() {
     var result = express();
     require('express-dynamic-helpers-patch')(result);
     result.dynamicHelpers({
-        auth: function (req, res) {
-            return req.session.auth;
+        displayName: function (req, res) {
+            return getUserName(req.user);
         }
     });
+    
+    function getUserName(auth) {
+        if (!auth) {
+            return null;
+        }
+        return auth.local.email || auth.google.displayName || auth.facebook.displayName;
+    }
 
     // public folder
     result.use(express.static(__dirname + '/public'));
@@ -52,11 +60,7 @@ function createApp() {
     result.use(flash());
     result.use(favicon(__dirname + '/public/favicon.ico'));
     
-    var dataProvider = new dbProvider({
-        connectionString: process.env.TACSTREAM_DB_CONNECTION_STRING,
-        user: process.env.TACSTREAM_DB_USER,
-        pass: process.env.TACSTREAM_DB_PASS
-    });
+    var dataProvider = new dbProvider(authConfig.mongo);
     passportConfig.configure(passport, dataProvider);
     result.set('dataProvider', dataProvider);
     

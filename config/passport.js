@@ -1,4 +1,10 @@
-﻿var LocalStrategy = require('passport-local').Strategy;
+﻿var 
+    LocalStrategy       = require('passport-local').Strategy,
+    FacebookStrategy    = require('passport-facebook').Strategy,
+    GoogleStrategy      = require('passport-google-oauth').OAuth2Strategy,
+    
+    configAuth          = require('./auth.js');
+
 
 function buildLocalStrategy(action) {
     return new LocalStrategy({
@@ -21,20 +27,18 @@ function configure(passport, dataProvider) {
     });
     
     passport.use('local-signup', buildLocalStrategy(function (req, email, password, done) {
-        process.nextTick(function () {
-            dataProvider.getUserByEmail(email, function (err, user) {
+        dataProvider.getUserByEmail(email, function (err, user) {
+            if (err) {
+                return done(err);
+            }
+            if (user) {
+                return done(null, false, req.flash('signupMessage', 'That email is already taken.'));
+            }
+            dataProvider.createUser(email, password, function (err, newUser) {
                 if (err) {
-                    return done(err);
+                    throw err;
                 }
-                if (user) {
-                    return done(null, false, req.flash('signupMessage', 'That email is already taken.'));
-                }
-                dataProvider.createUser(email, password, function (err, newUser) {
-                    if (err) {
-                        throw err;
-                    }
-                    return done(null, newUser);
-                });
+                return done(null, newUser);
             });
         });
     }));
@@ -53,7 +57,41 @@ function configure(passport, dataProvider) {
             return done(null, user);
         });
     }));
-}
 
+    passport.use(new FacebookStrategy(configAuth.facebook,  function (token, refreshToken, profile, done) {
+        dataProvider.getUserByFacebookId(profile.id, function (err, user) {
+            if (err) {
+                return done(err);
+            }
+            if (user) {
+                return done(null, user);
+            }
+            dataProvider.createUserFromFacebook(profile, token, function (err, user) {
+                if (err) {
+                    throw err;
+                }
+                return done(null, user);
+            });
+        });
+    }));
+
+
+    passport.use(new GoogleStrategy(configAuth.google, function (token, refreshToken, profile, done) {
+        dataProvider.getUserByGoogleId(profile.id, function (err, user) {
+            if (err) {
+                return done(err);
+            }
+            if (user) {
+                return done(null, user);
+            }
+            dataProvider.createUserFromGoogle(profile, token, function (err, user) {
+                if (err) {
+                    throw err;
+                }
+                return done(null, user);
+            });
+        });
+    }));
+}
 
 module.exports.configure = configure;

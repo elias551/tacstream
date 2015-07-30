@@ -3,7 +3,7 @@ html
     head
         title= "TACstream - Login"    
         link(rel='stylesheet',href='//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css')
-        link(rel='stylesheet',href='//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css')
+        link(rel='stylesheet',href='//netdna.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css')
     body
         .container
             .col-sm-6.col-sm-offset-3
@@ -22,6 +22,14 @@ html
                         input.form-control(type='password',name='password')
                     button.btn.btn-warning.btn-lg(type='submit') Login
 
+                    hr
+                    a.btn.btn-primary.btn-lg(href='/auth/facebook')
+                        span.fa.fa-facebook
+                        span &nbsp;Facebook
+                    a.btn.btn-danger.btn-lg(href='/auth/google')
+                        span.fa.fa-google
+                        span &nbsp;Google
+                            
                     hr
 
                     p 

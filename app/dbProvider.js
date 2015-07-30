@@ -13,24 +13,57 @@ var dbProvider = function (options) {
         pass: options.pass
     });
     
-    self.getUserByEmail = function (email, callback) {
-        User.findOne({ 'local.email' : email }, callback);
-    };
-
     self.getUserById = function (id, callback) {
         User.findById(id, callback);
     };
-
+    
+    self.getUserByEmail = function (email, callback) {
+        var query = {
+            'local.email' : email
+        };
+        User.findOne(query, callback);
+    };
+    
+    self.getUserByFacebookId = function (profileId, callback) {
+        var query = {
+            'facebook.id' : profileId
+        };
+        User.findOne(query, callback);
+    };
+    
+    self.getUserByGoogleId = function (profileId, callback) {
+        var query = {
+            'google.id' : profileId
+        };
+        User.findOne(query, callback);
+    };
+    
     self.createUser = function (email, password, callback) {
         var user = new User();
         user.local.email = email;
         user.local.password = user.generateHash(password);
         user.save(function (err) {
-            if (err) {
-                callback(err);
-                return;
-            }
-            return callback(null, user);
+            return callback(err, user);
+        });
+    };
+    
+    self.createUserFromFacebook = function (profile, token, callback) {
+        var user = new User();
+        user.facebook.id = profile.id;
+        user.facebook.token = token;
+        user.facebook.displayName = profile.displayName;
+        user.save(function (err) {
+            return callback(err, user);
+        });
+    };
+    
+    self.createUserFromGoogle = function (profile, token, callback) {
+        var user = new User();
+        user.google.id = profile.id;
+        user.google.token = token;
+        user.google.displayName = profile.displayName;
+        user.save(function (err) {
+            return callback(err, user);
         });
     };
 };
