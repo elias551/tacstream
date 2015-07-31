@@ -19,7 +19,6 @@ var express                 = require('express'),
     errorHandler            = require('./app/errorHandler'),
     routes                  = require('./app/routes');
 
-
 function createApp() {
     var result = express();
     require('express-dynamic-helpers-patch')(result);
@@ -43,7 +42,6 @@ function createApp() {
     result.set('views', __dirname + '/views');
     result.set('view engine', 'jade');
     result.engine('jade', require('jade').__express);
-
     result.use(cookieParser());
     result.use(bodyParser.urlencoded({
         extended: true
@@ -59,6 +57,7 @@ function createApp() {
     result.use(passport.session());
     result.use(flash());
     result.use(favicon(__dirname + '/public/favicon.ico'));
+    result.enable('trust proxy');
     
     var dataProvider = new dbProvider(authConfig.mongo);
     passportConfig.configure(passport, dataProvider);
