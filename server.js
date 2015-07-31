@@ -11,6 +11,7 @@ var express                 = require('express'),
     flash                   = require('connect-flash'),
     
     port                    = process.env.PORT,
+    env                     = process.env.NODE_ENV || 'local',
     sessionSecret           = process.env.TACSTREAM_SESSION_SECRET,
     
     authConfig              = require('./config/auth'),
@@ -19,10 +20,14 @@ var express                 = require('express'),
     errorHandler            = require('./app/errorHandler'),
     routes                  = require('./app/routes');
 
+if (env === 'local') {
+    port = 8080;
+}
+
 function createApp() {
-    var result = express();
-    require('express-dynamic-helpers-patch')(result);
-    result.dynamicHelpers({
+    var app = express();
+    require('express-dynamic-helpers-patch')(app);
+    app.dynamicHelpers({
         displayName: function (req, res) {
             return getUserName(req.user);
         }
@@ -36,34 +41,43 @@ function createApp() {
     }
 
     // public folder
-    result.use(express.static(__dirname + '/public'));
+    app.use(express.static(__dirname + '/public'));
     
     // view engine
-    result.set('views', __dirname + '/views');
-    result.set('view engine', 'jade');
-    result.engine('jade', require('jade').__express);
-    result.use(cookieParser());
-    result.use(bodyParser.urlencoded({
+    app.set('views', __dirname + '/views');
+    app.set('view engine', 'jade');
+    app.engine('jade', require('jade').__express);
+    app.use(cookieParser());
+    app.use(bodyParser.urlencoded({
         extended: true
     }));
-    result.use(session({
+    app.use(session({
         secret: sessionSecret, 
         resave: true, 
         saveUninitialized: true
     }));
-    result.use(bodyParser.json());
-    result.use(compression());
-    result.use(passport.initialize());
-    result.use(passport.session());
-    result.use(flash());
-    result.use(favicon(__dirname + '/public/favicon.ico'));
-    result.enable('trust proxy');
+    app.use(bodyParser.json());
+    app.use(compression());
+    app.use(passport.initialize());
+    app.use(passport.session());
+    app.use(flash());
+    app.use(favicon(__dirname + '/public/favicon.ico'));
+    app.enable('trust proxy');
+    
+    if (env === 'production') {
+        app.use(function (req, res, next) {
+            if (req.headers['x-forwarded-proto'] !== 'https') {
+                return res.redirect(['https://', req.get('Host'), req.url].join(''));
+            }
+            return next();
+        });
+    }
     
     var dataProvider = new dbProvider(authConfig.mongo);
     passportConfig.configure(passport, dataProvider);
-    result.set('dataProvider', dataProvider);
+    app.set('dataProvider', dataProvider);
     
-    return result;
+    return app;
 }
 
 var app = createApp();
