@@ -82,7 +82,9 @@ function configure(passport, dataProvider) {
                 return done(err);
             }
             if (user) {
-                return done(null, user);
+                return dataProvider.updateGoogleProfilePicture(user, profile, function (err, updatedUser) {
+                    done(err, updatedUser);
+                });
             }
             dataProvider.createUserFromGoogle(profile, token, function (err, user) {
                 if (err) {

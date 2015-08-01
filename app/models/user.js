@@ -21,7 +21,8 @@ var userSchema = mongoose.Schema({
     google           : {
         id           : String,
         token        : String,
-        displayName  : String
+        displayName  : String,
+        profilePictureUrl  : String
     }
 
 });

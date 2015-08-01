@@ -34,33 +34,34 @@ html
                             |: #{user.local.password}
                 .col-sm-6
                     .well
-                        h3
-                            span.fa.fa-facebook
-                            span &nbsp;Facebook
-                        p
-                            strong id
-                            |: #{user.facebook.id}
-                            br
-                            strong Display name
-                            |: #{user.facebook.displayName}
-                            br
-                            strong token
-                            |: #{user.facebook.token}
-            .row
-                .col-sm-6
-                    .well
-                        h3
-                            span.fa.fa-google
-                            span &nbsp;Google
-                        p
-                            strong id
-                            |: #{user.google.id}
-                            br
-                            strong token
-                            |: #{user.google.token}
-                            br
-                            strong display name
-                            |: #{user.google.displayName}
+                        if user.facebook.id
+                            h3
+                                span.fa.fa-facebook
+                                span &nbsp;Facebook
+                            p
+                                img(src='https://graph.facebook.com/#{user.facebook.id}/picture')
+                                strong id
+                                |: #{user.facebook.id}
+                                br
+                                strong Display name
+                                |: #{user.facebook.displayName}
+                                br
+                                strong token
+                                |: #{user.facebook.token}
+                        if user.google.id
+                            h3
+                                span.fa.fa-google
+                                span &nbsp;Google
+                            p
+                                img(src='#{user.google.profilePictureUrl}')
+                                strong id
+                                |: #{user.google.id}
+                                br
+                                strong token
+                                |: #{user.google.token}
+                                br
+                                strong display name
+                                |: #{user.google.displayName}
                             
             #content(style='height: 300px; text-align: left; border: solid 1px #999; overflow-y: scroll;')
             .controls

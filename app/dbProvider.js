@@ -62,6 +62,17 @@ var dbProvider = function (options) {
         user.google.id = profile.id;
         user.google.token = token;
         user.google.displayName = profile.displayName;
+        user.google.profilePicture = profile._json.image.url;
+        user.save(function (err) {
+            return callback(err, user);
+        });
+    };
+    
+    self.updateGoogleProfilePicture = function (user, profile, callback) {
+        if (user.profilePictureUrl === profile._json.image.url) {
+            return callback(null, user);
+        }
+        user.google.profilePictureUrl = profile._json.image.url;
         user.save(function (err) {
             return callback(err, user);
         });
