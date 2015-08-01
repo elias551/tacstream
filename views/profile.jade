@@ -12,7 +12,9 @@ html
                 h1
                     span.fa.fa-users
                     span &nbsp;Profile page
-                a.btn.btn-default.btn-sm(href='/logout') Logout
+                a.btn.btn-default(href='/logout') 
+                    span.fa.fa-sign-out
+                    span &nbsp;Logout
                 a.btn.btn-default(href='/')
                     span.fa.fa-home
                     span &nbsp;Index
@@ -65,6 +67,6 @@ html
                             
             #content(style='height: 300px; text-align: left; border: solid 1px #999; overflow-y: scroll;')
             .controls
-                input#name(style='width:350px;', placeholder='name', value='#{displayName}', readonly)
+                input#name(style='width:350px;', placeholder='name', value='#{authenticatedUser.displayName}', readonly)
                 input#field(style='width:350px;', placeholder='message')
                 input#send(type='button', value='send')

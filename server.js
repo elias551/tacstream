@@ -28,16 +28,25 @@ function createApp() {
     var app = express();
     require('express-dynamic-helpers-patch')(app);
     app.dynamicHelpers({
-        displayName: function (req, res) {
-            return getUserName(req.user);
+        authenticatedUser: function (req, res) {
+            return !req.user ? null : {
+                id: req.user.id,
+                displayName: getUserName(req.user),
+                profilePictureUrl: getProfilePictureUrl(req.user)
+            };
         }
     });
     
     function getUserName(auth) {
-        if (!auth) {
-            return null;
-        }
-        return auth.local.email || auth.google.displayName || auth.facebook.displayName;
+        return auth.local.email 
+             || auth.google.displayName 
+             || auth.facebook.displayName;
+    }
+    
+    function getProfilePictureUrl(auth) {
+        return auth.local.profilePictureUrl 
+            || auth.google.profilePictureUrl 
+            || (auth.facebook.id ? 'https://graph.facebook.com/' + auth.facebook.id + '/picture' : null);
     }
 
     // public folder

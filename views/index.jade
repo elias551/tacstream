@@ -10,8 +10,10 @@ html
                 h1
                     span.fa.fa-lock
                     span Node authentication
-                if displayName 
-                    p Logged user: #{ displayName }
+                if authenticatedUser 
+                    p 
+                        img(src='#{authenticatedUser.profilePictureUrl}')
+                        | Logged user: #{authenticatedUser.displayName}
                     a.btn.btn-default(href='/home')
                         span.fa.fa-user
                         span &nbsp;Profile
