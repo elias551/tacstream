@@ -70,7 +70,7 @@ function createApp() {
     app.use(passport.initialize());
     app.use(passport.session());
     app.use(flash());
-    app.use(favicon(__dirname + '/public/favicon.ico'));
+    app.use(favicon(__dirname + '/public/images/favicon.ico'));
     app.enable('trust proxy');
     
     if (env === 'production') {

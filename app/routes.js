@@ -2,9 +2,13 @@
  * Created by Elias on 7/27/2015.
  */
 var setup = function (app, passport) {
-
+    
     app.get('/', function (req, res) {
         res.render('index');
+    });
+    
+    app.get('/home', isLoggedIn, function (req, res) {
+        res.render('home');
     });
     
     app.route('/login')
@@ -47,7 +51,7 @@ var setup = function (app, passport) {
         failureRedirect : '/'
     }));
 
-    app.get('/home', isLoggedIn, function (req, res) {
+    app.get('/profile', isLoggedIn, function (req, res) {
         res.render('profile', {
             user : req.user
         });

@@ -2,10 +2,12 @@
 html
     head
         title= "TACstream"
-        script(src='/chat.js')
+        include ./includes/head.jade
+        script(src='./scripts/chat.js')
         script(src='/socket.io/socket.io.js')
-        link(rel='stylesheet', href='//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css')
-        link(rel='stylesheet', href='//maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css')
+        link(rel='stylesheet', href='http://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.3/leaflet.css')
+        script(src='http://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.3/leaflet.js')
+        script(src='./scripts/map.js')
     body
         .container
             .page-header.text-center
@@ -70,3 +72,7 @@ html
                 input#name(style='width:350px;', placeholder='name', value='#{authenticatedUser.displayName}', readonly)
                 input#field(style='width:350px;', placeholder='message')
                 input#send(type='button', value='send')
+
+            br
+
+            #map(style='height:300px;')
